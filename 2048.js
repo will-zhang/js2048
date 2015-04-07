@@ -1,3 +1,9 @@
+/*
+ * Grid类
+ * 2048游戏的模型类
+ */
+
+//构造函数
 function Grid(size) {
 	this.size = size;
 	this.cells = [];
@@ -9,6 +15,7 @@ function Grid(size) {
 	}
 }
 
+//随机设置一个空着的单元格，并返回该单元格
 Grid.prototype.SetRandomEmptyCell = function() {
 	var emptyCells = this.GetEmptyCells();
 	if(emptyCells.length == 0) 
@@ -27,6 +34,8 @@ Grid.prototype.GetEmptyCells = function() {
 	return emptyCells;
 };
 
+//根据不同方向遍历的向量
+//a[x][y] 向上遍历时x-1,y不变（0）
 Grid.vector = {
 	up:{x:-1,y:0},//up
 	down:{x:1,y:0},//down
@@ -34,6 +43,7 @@ Grid.vector = {
 	left:{x:0,y:-1}//left
 };
 
+//遍历路径
 Grid.prototype.GetDirectionPath = function(vector) {
 	var x = [], y = [];
 	for(var i = 0; i < this.size; i++) {
@@ -44,6 +54,7 @@ Grid.prototype.GetDirectionPath = function(vector) {
 	if(vector.y == 1) y.reverse();
 	return {x:x,y:y};
 }
+//移动
 Grid.prototype.Move = function(vector) {
 	var path = this.GetDirectionPath(vector);
 	var that = this;
@@ -55,6 +66,7 @@ Grid.prototype.Move = function(vector) {
 			merged[i].push(0);
 	}
 		
+    //遍历并移动
 	path.x.forEach(function(i){
 		path.y.forEach(function(j){
 			if(that.cells[i][j]) {
@@ -99,6 +111,20 @@ Grid.prototype.Move = function(vector) {
 	return move;
 }
 
+//按键映射
+var keyMap = {
+	38:Grid.vector.up,
+	87:Grid.vector.up,
+	39:Grid.vector.right,
+	68:Grid.vector.right,
+	40:Grid.vector.down,
+	83:Grid.vector.down,
+	37:Grid.vector.left,
+	65:Grid.vector.left,
+}
+/*
+ * 调试相关
+ */
 Grid.prototype.Print = function() {
 	for(var i = 0; i < this.cells.length; i++) {
 		var s = "";
@@ -133,13 +159,3 @@ Grid.prototype.Play = function(vector) {
 	return m;
 }
 
-var keyMap = {
-	38:Grid.vector.up,
-	87:Grid.vector.up,
-	39:Grid.vector.right,
-	68:Grid.vector.right,
-	40:Grid.vector.down,
-	83:Grid.vector.down,
-	37:Grid.vector.left,
-	65:Grid.vector.left,
-}
